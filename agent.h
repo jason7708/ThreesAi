@@ -74,7 +74,7 @@ protected:
 		//net.emplace_back(65536); // create an empty weight table with size 65536
 		//net.emplace_back(65536); // create an empty weight table with size 65536
 		// now net.size() == 2; net[0].size() == 65536; net[1].size() == 65536
-		//RRRRRRRRRRRRRRRRRRRRRR
+		//my
 		/*
 		net.emplace_back(50625); //15^4
 		net.emplace_back(50625); //15^4
@@ -91,7 +91,7 @@ protected:
 			net[2][i] = 0;		//6
 			net[3][i] = 0;		//6
 		}
-		//RRRRRRRRRRRRRRRRRRRRRR
+		//-----
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
@@ -159,7 +159,7 @@ private:
 	std::uniform_int_distribution<int> popup;
 };
 */
-// RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+// my
 class rndenv : public random_agent {
 public:
 	int slide_direction;
@@ -248,7 +248,6 @@ public:
 			default:
 				break;
 		}
-		//std::cout << "87878787\n";
 		std::shuffle(space.begin(), space.end(), engine);
 		//std::cout << "evil_dir:"<<slide_direction<<'\n';
 		
@@ -291,7 +290,7 @@ private:
 	int bonus;
 	int total_tile;
 };
-// RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+// -----
 /**
  * dummy player
  * select a legal action randomly
@@ -372,172 +371,17 @@ public:
 
 		}
 		if (lose != -1){
-				//RR
+				//my
 				player_direction = go;
-
-				//RR
+				//-----
 				return action::slide(go);
 		}
 		else{
 
 			return action();
 		}
-		
-		/*
-		int best = -1;
-		float max = -1000000.f;
-		int lose = -1;
-		for(int op : opcode){
-			board a = before;
-			board::reward reward = a.slide(op);
-			if(reward == -1){
-				continue;
-			}
-			lose = 0;
-			float tmp = expectimax(a, weight_table, 2, op);
-			if(tmp > max){
-				best = op;
-				max = tmp;
-			}
-		}
-		if(lose != -1){
-			return action::slide(best);
-		}
-		else{
-			return action();
-		}
-		*/
 	}
-	/*
-	float expectimax(board b, const weight_agent& weight_table, int level, int last){
-		if(level == 2){
-			std::array<int, 4> p;
-			p = {0, 0, 0, 0};
-			switch(last){
-				case 0: 
-					p={12, 13, 14, 15};   //up
-					break;
-				case 1: 
-					p={0, 4, 8, 12};   //right
-					break;
-				case 2: 
-					p={0, 1, 2, 3};   //down
-					break;
-				case 3: 
-					p={3, 7, 11, 15};   //left
-					break;
-				default:
-					break;
-			}
-			float avg = 0.0;
-			int n = 0;
-			for(int i : p){
-				if (b(i) != 0) continue;
-				board next = b;
-				next.place(i, next.info());
-				float tmp = 0.0;
-				tmp = expectimax(next, weight_table, 1, last);
-				avg += tmp;
-				n++;
-			}
-			avg /= n;
-			return avg;
-		}
-		else if(level == 1){
-			std::array<int, 4> d;
-			d = {0, 1, 2, 3};
-			float max = -1000000.f;
-			int lose = -1;
-			for(int i : d){
-				board a = b;
-				board::reward reward = a.slide(i);
-				if(reward == -1){
-					continue;
-				}
-				lose = 0;
-				float value_next = 0.0;
-				value_next += weight_table[0][a(0)+a(1)*15+a(2)*15*15+a(3)*15*15*15+a(4)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[0][a(3)+a(7)*15+a(11)*15*15+a(15)*15*15*15+a(2)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[0][a(15)+a(14)*15+a(13)*15*15+a(12)*15*15*15+a(11)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[0][a(12)+a(8)*15+a(4)*15*15+a(0)*15*15*15+a(13)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[0][a(3)+a(2)*15+a(1)*15*15+a(0)*15*15*15+a(7)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[0][a(0)+a(4)*15+a(8)*15*15+a(12)*15*15*15+a(1)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[0][a(12)+a(13)*15+a(14)*15*15+a(15)*15*15*15+a(8)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[0][a(15)+a(11)*15+a(7)*15*15+a(3)*15*15*15+a(14)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[1][a(4)+a(5)*15+a(6)*15*15+a(7)*15*15*15+a(8)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[1][a(2)+a(6)*15+a(10)*15*15+a(14)*15*15*15+a(1)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[1][a(11)+a(10)*15+a(9)*15*15+a(8)*15*15*15+a(7)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[1][a(13)+a(9)*15+a(5)*15*15+a(1)*15*15*15+a(14)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[1][a(7)+a(6)*15+a(5)*15*15+a(4)*15*15*15+a(11)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[1][a(1)+a(5)*15+a(9)*15*15+a(13)*15*15*15+a(2)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[1][a(8)+a(9)*15+a(10)*15*15+a(11)*15*15*15+a(4)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[1][a(14)+a(10)*15+a(6)*15*15+a(2)*15*15*15+a(13)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[2][a(0)+a(1)*15+a(2)*15*15+a(4)*15*15*15+a(5)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[2][a(3)+a(7)*15+a(11)*15*15+a(2)*15*15*15+a(6)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[2][a(15)+a(14)*15+a(13)*15*15+a(11)*15*15*15+a(10)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[2][a(12)+a(8)*15+a(4)*15*15+a(13)*15*15*15+a(9)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[2][a(3)+a(2)*15+a(1)*15*15+a(7)*15*15*15+a(6)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[2][a(0)+a(4)*15+a(8)*15*15+a(1)*15*15*15+a(5)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[2][a(12)+a(13)*15+a(14)*15*15+a(8)*15*15*15+a(9)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[2][a(15)+a(11)*15+a(7)*15*15+a(14)*15*15*15+a(10)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[3][a(4)+a(5)*15+a(6)*15*15+a(8)*15*15*15+a(9)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[3][a(2)+a(6)*15+a(10)*15*15+a(1)*15*15*15+a(5)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[3][a(11)+a(10)*15+a(9)*15*15+a(7)*15*15*15+a(6)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_next += weight_table[3][a(13)+a(9)*15+a(5)*15*15+a(14)*15*15*15+a(10)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[3][a(7)+a(6)*15+a(5)*15*15+a(11)*15*15*15+a(10)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_next += weight_table[3][a(1)+a(5)*15+a(9)*15*15+a(2)*15*15*15+a(6)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_next += weight_table[3][a(8)+a(9)*15+a(10)*15*15+a(4)*15*15*15+a(5)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_next += weight_table[3][a(14)+a(10)*15+a(6)*15*15+a(13)*15*15*15+a(9)*15*15*15*15+a(5)*15*15*15*15*15];
-
-				if((reward+value_next)>=max){
-					max = reward+value_next;
-				}
-			}
-			if(lose != -1){
-				return max;
-			}
-			else{
-				float value_ = 0.0;
-				board a = b;
-				value_ += weight_table[0][a(0)+a(1)*15+a(2)*15*15+a(3)*15*15*15+a(4)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[0][a(3)+a(7)*15+a(11)*15*15+a(15)*15*15*15+a(2)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[0][a(15)+a(14)*15+a(13)*15*15+a(12)*15*15*15+a(11)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[0][a(12)+a(8)*15+a(4)*15*15+a(0)*15*15*15+a(13)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[0][a(3)+a(2)*15+a(1)*15*15+a(0)*15*15*15+a(7)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[0][a(0)+a(4)*15+a(8)*15*15+a(12)*15*15*15+a(1)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[0][a(12)+a(13)*15+a(14)*15*15+a(15)*15*15*15+a(8)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[0][a(15)+a(11)*15+a(7)*15*15+a(3)*15*15*15+a(14)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[1][a(4)+a(5)*15+a(6)*15*15+a(7)*15*15*15+a(8)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[1][a(2)+a(6)*15+a(10)*15*15+a(14)*15*15*15+a(1)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[1][a(11)+a(10)*15+a(9)*15*15+a(8)*15*15*15+a(7)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[1][a(13)+a(9)*15+a(5)*15*15+a(1)*15*15*15+a(14)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[1][a(7)+a(6)*15+a(5)*15*15+a(4)*15*15*15+a(11)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[1][a(1)+a(5)*15+a(9)*15*15+a(13)*15*15*15+a(2)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[1][a(8)+a(9)*15+a(10)*15*15+a(11)*15*15*15+a(4)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[1][a(14)+a(10)*15+a(6)*15*15+a(2)*15*15*15+a(13)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[2][a(0)+a(1)*15+a(2)*15*15+a(4)*15*15*15+a(5)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[2][a(3)+a(7)*15+a(11)*15*15+a(2)*15*15*15+a(6)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[2][a(15)+a(14)*15+a(13)*15*15+a(11)*15*15*15+a(10)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[2][a(12)+a(8)*15+a(4)*15*15+a(13)*15*15*15+a(9)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[2][a(3)+a(2)*15+a(1)*15*15+a(7)*15*15*15+a(6)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[2][a(0)+a(4)*15+a(8)*15*15+a(1)*15*15*15+a(5)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[2][a(12)+a(13)*15+a(14)*15*15+a(8)*15*15*15+a(9)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[2][a(15)+a(11)*15+a(7)*15*15+a(14)*15*15*15+a(10)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[3][a(4)+a(5)*15+a(6)*15*15+a(8)*15*15*15+a(9)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[3][a(2)+a(6)*15+a(10)*15*15+a(1)*15*15*15+a(5)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[3][a(11)+a(10)*15+a(9)*15*15+a(7)*15*15*15+a(6)*15*15*15*15+a(5)*15*15*15*15*15];
-				value_ += weight_table[3][a(13)+a(9)*15+a(5)*15*15+a(14)*15*15*15+a(10)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[3][a(7)+a(6)*15+a(5)*15*15+a(11)*15*15*15+a(10)*15*15*15*15+a(9)*15*15*15*15*15];
-				value_ += weight_table[3][a(1)+a(5)*15+a(9)*15*15+a(2)*15*15*15+a(6)*15*15*15*15+a(10)*15*15*15*15*15];
-				value_ += weight_table[3][a(8)+a(9)*15+a(10)*15*15+a(4)*15*15*15+a(5)*15*15*15*15+a(6)*15*15*15*15*15];
-				value_ += weight_table[3][a(14)+a(10)*15+a(6)*15*15+a(13)*15*15*15+a(9)*15*15*15*15+a(5)*15*15*15*15*15];
-				return value_;
-			}
-		}
-		return -1;
-	}
-	*/
 private:
 	std::array<int, 4> opcode;
-	int player_direction; //RRRRRRRRRRRRRR
+	int player_direction; //my
 };

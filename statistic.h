@@ -83,9 +83,9 @@ public:
 			if (stat[t] == 0) continue;
 			unsigned accu = std::accumulate(std::begin(stat) + t, std::end(stat), 0);
 			//std::cout << "\t" << ((1 << t) & -2u); // type
-			//RRRRRRRRRRRRRRRR
+			//my
 			std::cout << "\t" << ((1<<(t-3))*3);
-			//RRRRRRRRRRRRRRRR
+			//-----
 			std::cout << "\t" << (accu * 100.0 / blk) << "%"; // win rate
 			std::cout << "\t" "(" << (stat[t] * 100.0 / blk) << "%" ")"; // percentage of ending
 			std::cout << std::endl;

@@ -138,7 +138,7 @@ public:
 		return (*this != prev) ? score : -1;
 	}
 	*/
-	//RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+	//my
 	reward slide_left() {
 		board prev = *this;
 		reward score = 0;
@@ -188,7 +188,7 @@ public:
 		//^^^^^^^^^^^^^^^^^^^^^^^^
 		return (*this != prev) ? score : -1;
 	}
-	//RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+	//-----
 	reward slide_right() {
 		reflect_horizontal();
 		reward score = slide_left();

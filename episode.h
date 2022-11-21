@@ -201,7 +201,7 @@ public:
 		//if(std::max(step() + 1, size_t(9)) % 2)std::cout<<"evil"<<'\n';
 		//else std::cout<<"play"<<'\n';
 		//return (std::max(step() + 1, size_t(2)) % 2) ? play : evil; //decide who moves
-		return (std::max(step() + 1, size_t(9)) % 2) ? evil : play;  //RRRRR
+		return (std::max(step() + 1, size_t(9)) % 2) ? evil : play;  //my
 	}
 	agent& last_turns(agent& play, agent& evil) {
 		return take_turns(evil, play);
@@ -308,7 +308,6 @@ protected:
 			}
 			return in;
 		}
-		//RRRRRRRRRRRRRRR
 		
 	};
 

@@ -1,9 +1,6 @@
 /**
- * Basic Environment for Game 2048
- * use 'g++ -std=c++11 -O3 -g -o 2048 2048.cpp' to compile the source
- *
- * Computer Games and Intelligence (CGI) Lab, NCTU, Taiwan
- * http://www.aigames.nctu.edu.tw
+ * Basic Environment for Game Threes
+ * use 'g++ -std=c++11 -O3 -g -o threes threes.cpp' to compile the source
  */
 
 #include <iostream>
@@ -57,10 +54,10 @@ int main(int argc, const char* argv[]) {
 
 	player play(play_args);
 	rndenv evil(evil_args);
-	//RRRRRRRRRRRR
+	//my
 	weight_agent table(play_args);
 	learning_agent alpha(play_args);
-	//RRRRRRRRRRRR
+	//-----
 
 	while (!stat.is_finished()) {
 		play.open_episode("~:" + evil.name());
@@ -68,24 +65,22 @@ int main(int argc, const char* argv[]) {
 
 		stat.open_episode(play.name() + ":" + evil.name());
 		episode& game = stat.back();
-		//RRRRRRRRR
+		//my
 		evil.clear_bag();
 		evil.initial();
-		//RRRRRRRRR
+		//-----
 		while (true) {
 			agent& who = game.take_turns(play, evil);
-			//std::cout << "debug777\n";
 			action move = who.take_action(game.state(), table);
 			//std::cout << game.step()<<'\n';
-			//std::cout << "debug888\n";
 			if (game.apply_action(move) != true) break;
-			//RRRRRRRRRRRRRRR
+			//my
 
 			if(game.step()>9 && game.step() % 2 == 0) {
 				evil.get_user_direction(play.player_choose());
 			}
 			//evil.slide_direction=play.player_direction;		
-			//RRRRRRRRRRRRRRR
+			//-----
 			if (who.check_for_win(game.state())) break;
 		}
 		//std::cout << "===";
@@ -94,14 +89,14 @@ int main(int argc, const char* argv[]) {
 
 		play.close_episode(win.name());
 		evil.close_episode(win.name());
-		//RRRRRRRRRRRRRRRRRRR
+		//my
 		game.train_update(table, alpha);
-		//RRRRRRRRRRRRRRRRRRR
+		//-----
 	}
 	/*for(int i=0; i<100;i++){
 		std::cout << table[0][i] << "\n";
 	}
-*/
+	*/
 	if (summary) {
 		stat.summary();
 	}
