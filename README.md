@@ -1,2 +1,2 @@
 # ThreesAi
-Change from Theory of computer game hw
+Change from Theory of computer game hw 2018
