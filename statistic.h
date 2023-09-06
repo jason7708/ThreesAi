@@ -17,11 +17,7 @@ public:
 	 *
 	 * note that total >= limit >= block
 	 */
-	statistic(size_t total, size_t block = 0, size_t limit = 0)
-		: total(total),
-		  block(block ? block : total),
-		  limit(limit ? limit : total),
-		  count(0) {}
+	statistic(size_t total, size_t block = 0, size_t limit = 0) : total(total), block(block ? block : total), limit(limit ? limit : total), count(0) {}
 
 public:
 	/**
@@ -105,7 +101,9 @@ public:
 	}
 
 	void open_episode(const std::string& flag = "") {
-		if (count++ >= limit) data.pop_front();
+		if (count++ >= limit) {
+			data.pop_front();
+		} 
 		data.emplace_back();
 		data.back().open_episode(flag);
 	}

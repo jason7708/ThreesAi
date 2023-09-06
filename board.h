@@ -36,42 +36,28 @@ public:
 
 	data info() const { return attr; }
 	data info(data dat) { data old = attr; attr = dat; return old; }
-public: //******************************
-	bool BonusOn(){
+public: 
+	// when there is a tile >= 48, bonus tile is On : For random generation of a tile 1 ~ maxtile
+	bool BonusOn() {
 		board now = *this;
-		for(int i = 0;i <= 15;i++){
+		for(int i=0; i<16; i++) {
 			if(now(i) >= 7){
 				return true;
 			}
 		}
 		return false;
 	}
-	int MaxTile(){
-		board now = *this;
-		unsigned max = 0;
-		for(int i = 0;i <= 15;i++){
-			if(now(i) > max){
-				max = now(i);
+	cell MaxTile() {
+		board& now = *this;
+		cell mx = 0;
+		for(int i=0; i<16; i++) {
+			if(now(i) > mx){
+				mx = now(i);
 			}
 		}
-		return max;
+		return mx;
 	}
-	bool InitNine(){
-		board now = *this;
-		int nine = 0;
-		for(int i =0;i<=15;i++){
-			if(now(i)!=0){
-				nine++;
-			}
-		}
-		if(nine == 8){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-		//******************************
+
 public:
 	bool operator ==(const board& b) const { return tile == b.tile; }
 	bool operator < (const board& b) const { return tile <  b.tile; }
@@ -138,20 +124,23 @@ public:
 		return (*this != prev) ? score : -1;
 	}
 	*/
-	//my
+	int getScore() {
+		int sum = 0;
+		for(int r=0; r<4; r++) {
+			auto& row = tile[r];
+			for(int c=0; c<4; c++) {
+				if(row[c] > 2 && row[c] <= 14) {
+					sum += pow(3, row[c] - 2);
+				}
+			}
+ 		}
+		return sum;
+	}
 	reward slide_left() {
 		board prev = *this;
 		reward score = 0;
 		//compute reward
-		int sum_old=0, sum_new=0;
-		for(int r=0; r<4; r++){
-			auto&row = tile[r];
-			for(int c=0; c<4; c++) {
-				if(row[c] > 2 && row[c] <= 14)
-				sum_old += pow(3, row[c]-2);
-			}
-		}
-		//^^^^^^^^^^^^^^^^^^^^^^^^
+		int score_old = getScore();
 		for(int r=0; r<4; r++) {
 			auto& row = tile[r];
 			int left = 0, com = 0; 
@@ -177,18 +166,11 @@ public:
 				}
 			}
 		}
-		for(int r=0; r<4; r++){
-			auto&row = tile[r];
-			for(int c=0; c<4; c++) {
-				if(row[c] > 2 && row[c] <= 14)
-				sum_new += pow(3, row[c]-2);
-			}
-		}
-		score = sum_new - sum_old;
-		//^^^^^^^^^^^^^^^^^^^^^^^^
+		score = getScore() - score_old;
+
 		return (*this != prev) ? score : -1;
 	}
-	//-----
+
 	reward slide_right() {
 		reflect_horizontal();
 		reward score = slide_left();
