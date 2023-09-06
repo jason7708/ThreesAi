@@ -1,6 +1,6 @@
 /**
  * Basic Environment for Game Threes
- * use 'g++ -std=c++11 -O3 -g -o threes threes.cpp' to compile the source
+ * use 'clang++ -O3 -o threes threes.cpp' to compile the source
  */
 
 #include <iostream>
